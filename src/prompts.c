@@ -42,8 +42,7 @@ static int get_goal_input(int line) {
   while(is_active) {
     // render
     wclear(w);
-    mvwprintw(w, 0, 0, "%s", buffer);
-    wmove(w, 0, pos);
+    mvwprintw(w, 0, 0, "Enter goal: %s", buffer);
     wrefresh(w);
 
     // editor
@@ -154,14 +153,19 @@ int line_edit_prompt(char data[], int line, int col) {
 }
 
 int new_task_prompt(struct tasklist* tl, int line) {
-  // task values
+  // init task values
   char desc[DESC_MAX];
   int goal = 0;
 
-  // get string
-  line_edit_prompt(desc, line, 0);
+  // prompt for desc
+  WINDOW* prompt = newwin(1, 24, line+1, 0);
+  wclear(prompt);
+  mvwprintw(prompt, 0, 0, "Enter task description: ");
+  wrefresh(prompt);
+  line_edit_prompt(desc, line, 24);
+  delwin(prompt);
 
-  // get goal
+  // prompt for goal
   goal = get_goal_input(line);
 
   // add to list
