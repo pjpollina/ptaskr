@@ -30,20 +30,17 @@ int add_task_to_list(struct tasklist*, struct task);
 struct task remove_task_from_list(struct tasklist*, int);
 
 int tasklist_menu(struct tasklist*);
+
 int render_header(WINDOW*, struct tasklist);
 int render_task(WINDOW*, struct task, int, int);
 int render_tasklist(WINDOW*, struct tasklist, int);
 int render_ntprompt(WINDOW*, int, int);
 
 int line_editor(char[], int, int);
-int insert_into_string(char[], char, int);
-int remove_from_string(char[], int);
+int newtask_menu(struct tasklist*, int);
+bool confirmation_prompt(int);
 
 int write_listfile(struct tasklist*, char*);
 int read_listfile(struct tasklist*, char*);
-
-int newtask_menu(struct tasklist*, int);
-
-bool confirmation_prompt(int);
 
 #endif

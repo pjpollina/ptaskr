@@ -1,12 +1,12 @@
 # Compiler info
-CC			= gcc
-CFLAGS	= -Wall
+CC	    = gcc
+CFLAGS = -Wall
 
 # Program info
 NAME = plistr
 MAIN = src/tasklist.c
 DEPS = src/defs.h
-OBJS = obj/deltask.o obj/editor.o obj/io.o obj/menu.o obj/newtask.o obj/structs.o
+OBJS = obj/io.o obj/menus.o obj/prompts.o obj/rendering.o obj/structs.o
 LIBS = -lncurses
 
 bin/$(NAME): $(MAIN) $(DEPS) $(OBJS)
