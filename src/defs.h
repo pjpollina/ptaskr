@@ -36,8 +36,8 @@ int render_task(WINDOW*, struct task, int, int);
 int render_tasklist(WINDOW*, struct tasklist, int);
 int render_ntprompt(WINDOW*, int, int);
 
-int line_editor(char[], int, int);
-int newtask_menu(struct tasklist*, int);
+int line_edit_prompt(char[], int, int);
+int new_task_prompt(struct tasklist*, int);
 bool confirmation_prompt(int);
 
 int write_listfile(struct tasklist*, char*);

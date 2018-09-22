@@ -95,7 +95,7 @@ static int get_goal_input(int line) {
   return input;
 }
 
-int line_editor(char data[], int line, int col) {
+int line_edit_prompt(char data[], int line, int col) {
   // set up editor window
   WINDOW* editor = newwin(1, 80, line+1, col);
   keypad(editor, true);
@@ -153,13 +153,13 @@ int line_editor(char data[], int line, int col) {
   return 0;
 }
 
-int newtask_menu(struct tasklist* tl, int line) {
+int new_task_prompt(struct tasklist* tl, int line) {
   // task values
   char desc[DESC_MAX];
   int goal = 0;
 
   // get string
-  line_editor(desc, line, 0);
+  line_edit_prompt(desc, line, 0);
 
   // get goal
   goal = get_goal_input(line);

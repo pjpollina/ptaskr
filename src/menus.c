@@ -72,7 +72,7 @@ int tasklist_menu(struct tasklist* tl) {
       case 'e':
         if(pos != tl->task_count) {
           keypad(body, false);
-          line_editor(tl->tasks[pos].desc, pos % height, 3);
+          line_edit_prompt(tl->tasks[pos].desc, pos % height, 3);
           keypad(body, true);
         }
         break;
@@ -91,7 +91,7 @@ int tasklist_menu(struct tasklist* tl) {
       case 10:
         if(pos == tl->task_count) {
           keypad(body, false);
-          newtask_menu(tl, pos % height);
+          new_task_prompt(tl, pos % height);
           keypad(body, true);
         }
         break;

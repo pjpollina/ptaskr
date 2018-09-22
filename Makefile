@@ -3,7 +3,7 @@ CC	    = gcc
 CFLAGS = -Wall
 
 # Program info
-NAME = plistr
+NAME = ptaskr
 MAIN = src/tasklist.c
 DEPS = src/defs.h
 OBJS = obj/io.o obj/menus.o obj/prompts.o obj/rendering.o obj/structs.o
