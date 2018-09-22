@@ -173,6 +173,27 @@ int new_task_prompt(struct tasklist* tl, int line) {
   return 0;
 }
 
+int save_prompt(struct tasklist* tl, int line) {
+  // set up window
+  WINDOW* menu = newwin(1, getmaxx(stdscr), line+1, 0);
+
+  // activate keyboard control
+  keypad(menu, true);
+
+  // prompt for filepath
+  wclear(menu);
+  mvwprintw(menu, 0, 0, "Enter path to write: ");
+  wrefresh(menu);
+  line_edit_prompt(filepath, line, 21);
+
+  // write to file
+  write_listfile(tl, filepath);
+
+  // terminate
+  delwin(menu);
+  return 0;
+}
+
 bool confirmation_prompt(int line) {
   // set up prompt window
   WINDOW* prompt = newwin(1, 25, line+1, 0);

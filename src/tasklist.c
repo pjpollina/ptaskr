@@ -3,12 +3,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 
 #include "defs.h"
 
-#define FILEPATH "data/list.dat"
+#define DEFAULT_FILEPATH "data/list.dat"
 
-int main() {
+int main(int argc, char** argv) {
   // ncurses setup
   initscr();
   raw();
@@ -25,9 +26,12 @@ int main() {
   use_default_colors();
   init_pair(COMPLETE_COLOR, COLOR_GREEN, -1);
 
+  // get globals
+  strcpy(filepath, (argc > 1) ? argv[1] : DEFAULT_FILEPATH);
+
   // test structs
   struct tasklist tl;
-  int err = read_listfile(&tl, FILEPATH);
+  int err = read_listfile(&tl, filepath);
   if(err) {
     tl = init_tasklist("Test List");
     for(int i = 1; i < 31; i++) {
@@ -39,6 +43,5 @@ int main() {
 
   // logic
   tasklist_menu(&tl);
-  write_listfile(&tl, FILEPATH);
   endwin();
 }

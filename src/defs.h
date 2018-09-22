@@ -10,6 +10,8 @@
 #define COMPLETE_COLOR 1
 #define MENU_NEW_TASK "[New Task]"
 
+char filepath[4096];
+
 struct task {
   char desc[DESC_MAX];
   unsigned short goal;
@@ -38,6 +40,7 @@ int render_ntprompt(WINDOW*, int, int);
 
 int line_edit_prompt(char[], int, int);
 int new_task_prompt(struct tasklist*, int);
+int save_prompt(struct tasklist*, int);
 bool confirmation_prompt(int);
 
 int write_listfile(struct tasklist*, char*);

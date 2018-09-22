@@ -87,6 +87,13 @@ int tasklist_menu(struct tasklist* tl) {
           keypad(body, true);
           break;
         }
+      // save list to file
+      case 's':
+        if(confirmation_prompt(pos % height)) {
+          keypad(body, false);
+          save_prompt(tl, pos % height);
+          keypad(body, true);
+        }
       // new task check
       case 10:
         if(pos == tl->task_count) {
