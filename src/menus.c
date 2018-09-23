@@ -94,6 +94,7 @@ int tasklist_menu(struct tasklist* tl) {
           save_prompt(tl, pos % height);
           keypad(body, true);
         }
+        break;
       // shift tasks
       case CTRL_UP:
         if(pos > 0) {
