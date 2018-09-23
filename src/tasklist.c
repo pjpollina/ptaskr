@@ -43,5 +43,8 @@ int main(int argc, char** argv) {
 
   // logic
   tasklist_menu(&tl);
+
+  // terminate
   endwin();
+  return EXIT_SUCCESS;
 }

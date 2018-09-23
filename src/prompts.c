@@ -11,19 +11,19 @@ static int insert_into_string(char str[], char new, int pos) {
   if(strlen(str) == pos) {
     str[pos] = new;
     str[pos + 1] = '\0';
-    return 0;
+    return EXIT_SUCCESS;
   }
   memmove(str + pos + 1, str + pos, (strlen(str) + 1));
   str[pos] = new;
   str[strlen(str)] = '\0';
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 static int remove_from_string(char str[], int pos) {
   if(pos != strlen(str))
     memmove(str + pos, str + pos + 1, (strlen(str) - 1));
   str[strlen(str) - 1] = '\0';
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 static int get_goal_input(int line) {
@@ -91,6 +91,7 @@ static int get_goal_input(int line) {
   // close
   curs_set(0);
   keypad(w, false);
+  delwin(w);
   return input;
 }
 
@@ -147,9 +148,12 @@ int line_edit_prompt(char data[], int line, int col) {
     }
   }
 
+  // terminate
   curs_set(0);
   strcpy(data, buffer);
-  return 0;
+  keypad(editor, false);
+  delwin(editor);
+  return EXIT_SUCCESS;
 }
 
 int new_task_prompt(struct tasklist* tl, int line) {
@@ -170,7 +174,7 @@ int new_task_prompt(struct tasklist* tl, int line) {
 
   // add to list
   add_task_to_list(tl, init_task(desc, goal));
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 int save_prompt(struct tasklist* tl, int line) {
@@ -191,7 +195,7 @@ int save_prompt(struct tasklist* tl, int line) {
 
   // terminate
   delwin(menu);
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 bool confirmation_prompt(int line) {

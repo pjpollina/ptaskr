@@ -1,4 +1,5 @@
 #include <string.h>
+#include <stdlib.h>
 #include <stdbool.h>
 
 #include "defs.h"
@@ -26,7 +27,7 @@ bool tasklist_full(struct tasklist tl) {
 int add_task_to_list(struct tasklist* tl, struct task t) {
   tl->tasks[tl->task_count] = t;
   tl->task_count++;
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 struct task remove_task_from_list(struct tasklist* tl, int index) {
@@ -42,12 +43,12 @@ int move_task_up(struct tasklist* tl, int pos) {
   struct task t = tl->tasks[pos-1];
   tl->tasks[pos-1] = tl->tasks[pos];
   tl->tasks[pos] = t;
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 int move_task_down(struct tasklist* tl, int pos) {
   struct task t = tl->tasks[pos];
   tl->tasks[pos] = tl->tasks[pos+1];
   tl->tasks[pos+1] = t;
-  return 0;
+  return EXIT_SUCCESS;
 }

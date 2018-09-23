@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "defs.h"
 
@@ -122,5 +123,9 @@ int tasklist_menu(struct tasklist* tl) {
         break;
     }
   }
-  return 0;
+  // terminate
+  keypad(body, false);
+  delwin(header);
+  delwin(body);
+  return EXIT_SUCCESS;
 }

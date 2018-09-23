@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #include "defs.h"
 
@@ -8,7 +9,7 @@ int write_listfile(struct tasklist* tl, char* filepath) {
   outfile = fopen(filepath, "w");
   if(!outfile) {
     fprintf(stderr, "Error opening file.\n");
-    return 1;
+    return EXIT_FAILURE;
   }
   // write file
   fprintf(outfile, "name: %s\n", tl->name);
@@ -17,7 +18,7 @@ int write_listfile(struct tasklist* tl, char* filepath) {
   }
   // close file
   fclose(outfile);
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 int read_listfile(struct tasklist* tl, char* filepath) {
@@ -26,7 +27,7 @@ int read_listfile(struct tasklist* tl, char* filepath) {
   infile = fopen(filepath, "r");
   if(!infile) {
     fprintf(stderr, "Error opening file.\n");
-    return 1;
+    return EXIT_FAILURE;
   }
   // read file
   fscanf(infile, "name: %[^\n]", tl->name);
@@ -37,5 +38,5 @@ int read_listfile(struct tasklist* tl, char* filepath) {
   }
   // close file
   fclose(infile);
-  return 0;
+  return EXIT_SUCCESS;
 }

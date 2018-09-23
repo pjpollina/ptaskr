@@ -1,5 +1,6 @@
 #include <ncurses.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "defs.h"
 
@@ -24,7 +25,7 @@ int render_header(WINDOW* w, struct tasklist tl) {
 
   // refresh window
   wrefresh(w);
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 int render_task(WINDOW* w, struct task t, int line, int highlight) {
@@ -41,7 +42,7 @@ int render_task(WINDOW* w, struct task t, int line, int highlight) {
   // turn off attributes
   wattroff(w, A_REVERSE);
   wattroff(w, COLOR_PAIR(COMPLETE_COLOR));
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 int render_tasklist(WINDOW* w, struct tasklist tl, int pos) {
@@ -56,7 +57,7 @@ int render_tasklist(WINDOW* w, struct tasklist tl, int pos) {
     }
     render_task(w, tl.tasks[i+(rows*page)], i, pos % rows);
   }
-  return 0;
+  return EXIT_SUCCESS;
 }
 
 int render_ntprompt(WINDOW* w, int line, int highlight) {
@@ -67,5 +68,5 @@ int render_ntprompt(WINDOW* w, int line, int highlight) {
   mvwprintw(w, line, 0, MENU_NEW_TASK);
   // turn off attributes
   wattroff(w, A_REVERSE);
-  return 0;
+  return EXIT_SUCCESS;
 }
