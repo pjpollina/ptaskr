@@ -48,7 +48,7 @@ int render_ntprompt(WINDOW*, int, int);
 int line_edit_prompt(char[], int, int);
 int new_task_prompt(struct tasklist*, int);
 int save_prompt(struct tasklist*, int);
-bool confirmation_prompt(int);
+bool confirmation_prompt(int, char*);
 
 int write_listfile(struct tasklist*, char*);
 int read_listfile(struct tasklist*, char*);

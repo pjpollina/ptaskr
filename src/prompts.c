@@ -198,9 +198,9 @@ int save_prompt(struct tasklist* tl, int line) {
   return EXIT_SUCCESS;
 }
 
-bool confirmation_prompt(int line) {
+bool confirmation_prompt(int line, char* mesg) {
   // set up prompt window
-  WINDOW* prompt = newwin(1, 25, line+1, 0);
+  WINDOW* prompt = newwin(1, strlen(mesg)+10, line+1, 0);
   keypad(prompt, true);
   curs_set(true);
 
@@ -212,7 +212,7 @@ bool confirmation_prompt(int line) {
   while(is_active) {
     // rendering
     wclear(prompt);
-    mvwprintw(prompt, 0, 0, "Are you sure? (y/n): %c", yn);
+    mvwprintw(prompt, 0, 0, "%s (y/n): %c", mesg, yn);
     wrefresh(prompt);
 
     // input
