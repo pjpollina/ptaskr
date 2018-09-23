@@ -82,6 +82,7 @@ int tasklist_menu(struct tasklist* tl) {
       case KEY_DC:
         if(pos != tl->task_count) {
           keypad(body, false);
+          render_line_wipeout(pos % height);
           if(confirmation_prompt(pos % height, "Delete selected task?")) {
             remove_task_from_list(tl, pos);
           }
@@ -90,11 +91,12 @@ int tasklist_menu(struct tasklist* tl) {
         }
       // save list to file
       case CTRL('s'):
+        keypad(body, false);
+        render_line_wipeout(pos % height);
         if(confirmation_prompt(pos % height, "Write changes to disk?")) {
-          keypad(body, false);
           save_prompt(tl, pos % height);
-          keypad(body, true);
         }
+        keypad(body, true);
         break;
       // shift tasks
       case CTRL_UP:

@@ -70,3 +70,12 @@ int render_ntprompt(WINDOW* w, int line, int highlight) {
   wattroff(w, A_REVERSE);
   return EXIT_SUCCESS;
 }
+
+int render_line_wipeout(int line) {
+  WINDOW* w = newwin(1, DESC_MAX+20, line+1, 0);
+  wclear(w);
+  mvwhline(w, 0, 0, ' ', getmaxx(w));
+  wrefresh(w);
+  delwin(w);
+  return EXIT_SUCCESS;
+}
