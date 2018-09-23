@@ -37,3 +37,17 @@ struct task remove_task_from_list(struct tasklist* tl, int index) {
   tl->task_count--;
   return removed;
 }
+
+int move_task_up(struct tasklist* tl, int pos) {
+  struct task t = tl->tasks[pos-1];
+  tl->tasks[pos-1] = tl->tasks[pos];
+  tl->tasks[pos] = t;
+  return 0;
+}
+
+int move_task_down(struct tasklist* tl, int pos) {
+  struct task t = tl->tasks[pos];
+  tl->tasks[pos] = tl->tasks[pos+1];
+  tl->tasks[pos+1] = t;
+  return 0;
+}

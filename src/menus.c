@@ -69,7 +69,7 @@ int tasklist_menu(struct tasklist* tl) {
           tl->tasks[pos].reached++;
         break;
       // edit current task
-      case 'e':
+      case CTRL('e'):
         if(pos != tl->task_count) {
           keypad(body, false);
           line_edit_prompt(tl->tasks[pos].desc, pos % height, 3);
@@ -77,7 +77,7 @@ int tasklist_menu(struct tasklist* tl) {
         }
         break;
       // delete current task
-      case 'd':
+      case CTRL('d'):
       case KEY_DC:
         if(pos != tl->task_count) {
           keypad(body, false);
@@ -88,12 +88,25 @@ int tasklist_menu(struct tasklist* tl) {
           break;
         }
       // save list to file
-      case 's':
+      case CTRL('s'):
         if(confirmation_prompt(pos % height)) {
           keypad(body, false);
           save_prompt(tl, pos % height);
           keypad(body, true);
         }
+      // shift tasks
+      case CTRL_UP:
+        if(pos > 0) {
+          move_task_up(tl, pos);
+          pos--;
+        }
+        break;
+      case CTRL_DOWN:
+        if(pos < tl->task_count-1) {
+          move_task_down(tl, pos);
+          pos++;
+        }
+        break;
       // new task check
       case 10:
         if(pos == tl->task_count) {

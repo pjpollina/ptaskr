@@ -10,6 +10,11 @@
 #define COMPLETE_COLOR 1
 #define MENU_NEW_TASK "[New Task]"
 
+#define CTRL_UP 566
+#define CTRL_DOWN 525
+
+#define CTRL(key) ((key) & 037)
+
 char filepath[4096];
 
 struct task {
@@ -30,6 +35,8 @@ bool task_complete(struct task);
 bool tasklist_full(struct tasklist);
 int add_task_to_list(struct tasklist*, struct task);
 struct task remove_task_from_list(struct tasklist*, int);
+int move_task_up(struct tasklist*, int);
+int move_task_down(struct tasklist*, int);
 
 int tasklist_menu(struct tasklist*);
 
