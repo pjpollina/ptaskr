@@ -20,9 +20,13 @@ static int insert_into_string(char str[], char new, int pos) {
 }
 
 static int remove_from_string(char str[], int pos) {
-  if(pos != strlen(str))
-    memmove(str + pos, str + pos + 1, (strlen(str) - 1));
-  str[strlen(str) - 1] = '\0';
+  if(pos == strlen(str)) {
+    str[strlen(str)-1] = '\0';
+    return EXIT_SUCCESS;
+  }
+  for(int i = pos-1; i < strlen(str); i++) {
+    str[i] = str[i + 1];
+  }
   return EXIT_SUCCESS;
 }
 
@@ -43,6 +47,7 @@ static int get_goal_input(int line) {
     // render
     wclear(w);
     mvwprintw(w, 0, 0, "Enter goal: %s", buffer);
+    wmove(w, 0, pos + 12);
     wrefresh(w);
 
     // editor
@@ -97,13 +102,13 @@ static int get_goal_input(int line) {
 
 int line_edit_prompt(char data[], int line, int col) {
   // set up editor window
-  WINDOW* editor = newwin(1, 80, line+1, col);
+  WINDOW* editor = newwin(1, DESC_MAX, line+1, col);
   keypad(editor, true);
   curs_set(true);
 
   // init data
   int pos = strlen(data);
-  char buffer[80];
+  char buffer[DESC_MAX];
   strcpy(buffer, data);
 
   // logic
@@ -123,7 +128,7 @@ int line_edit_prompt(char data[], int line, int col) {
           pos--;
         break;
       case KEY_RIGHT:
-        if(pos != strlen(data))
+        if(pos != strlen(buffer))
           pos++;
         break;
       // delete a char
