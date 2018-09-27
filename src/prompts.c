@@ -182,7 +182,7 @@ int new_task_prompt(struct tasklist* tl, int line) {
   return EXIT_SUCCESS;
 }
 
-int save_prompt(struct tasklist* tl, int line) {
+int save_prompt(struct tasklist* tl, int line, char* filepath) {
   // set up window
   WINDOW* menu = newwin(1, getmaxx(stdscr), line+1, 0);
 

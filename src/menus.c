@@ -5,7 +5,7 @@
 
 #include "defs.h"
 
-int tasklist_menu(struct tasklist* tl) {
+int tasklist_menu(struct tasklist* tl, char* filepath) {
   // set up windows
   WINDOW* header = newwin(1, getmaxx(stdscr), 0, 0);
   WINDOW* body = newwin(getmaxy(stdscr)-1, getmaxx(stdscr), 1, 0);
@@ -15,7 +15,7 @@ int tasklist_menu(struct tasklist* tl) {
 
   // logic
   int pos = 0;
-  int is_active = true;
+  bool is_active = true;
   bool changed_since_save = false;
   while(is_active) {
     // check for term resize
@@ -102,7 +102,7 @@ int tasklist_menu(struct tasklist* tl) {
         keypad(body, false);
         render_line_wipeout(pos % height);
         if(confirmation_prompt(pos % height, "Write changes to disk?")) {
-          save_prompt(tl, pos % height);
+          save_prompt(tl, pos % height, filepath);
           changed_since_save = false;
         }
         keypad(body, true);
@@ -157,7 +157,7 @@ int tasklist_menu(struct tasklist* tl) {
         if(changed_since_save) {
           render_line_wipeout(pos % height);
           if(confirmation_prompt(pos % height, "Write unsaved changes to disk?")) {
-            save_prompt(tl, pos % height);
+            save_prompt(tl, pos % height, filepath);
           }
         }
         is_active = false;

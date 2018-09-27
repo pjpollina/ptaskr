@@ -26,7 +26,8 @@ int main(int argc, char** argv) {
   use_default_colors();
   init_pair(COMPLETE_COLOR, COLOR_GREEN, -1);
 
-  // get globals
+  // set filepath
+  char filepath[4096];
   strcpy(filepath, (argc > 1) ? argv[1] : DEFAULT_FILEPATH);
 
   // test structs
@@ -42,7 +43,7 @@ int main(int argc, char** argv) {
   }
 
   // logic
-  tasklist_menu(&tl);
+  tasklist_menu(&tl, filepath);
 
   // terminate
   endwin();
