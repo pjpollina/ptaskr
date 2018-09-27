@@ -203,6 +203,31 @@ int save_prompt(struct tasklist* tl, int line) {
   return EXIT_SUCCESS;
 }
 
+int rename_list_prompt(struct tasklist* tl, int line) {
+  // set up window
+  WINDOW* prompt = newwin(1, getmaxx(stdscr), line+1, 0);
+
+  // activate keyboard control
+  keypad(prompt, true);
+
+  // init data
+  char buffer[DESC_MAX];
+  strcpy(buffer, tl->name);
+
+  // get new prompt
+  wclear(prompt);
+  mvwprintw(prompt, 0, 0, "Enter list name: ");
+  wrefresh(prompt);
+  line_edit_prompt(buffer, line, 17);
+
+  // commit changes
+  strncpy(tl->name, buffer, DESC_MAX);
+
+  // terminate
+  delwin(prompt);
+  return EXIT_SUCCESS;
+}
+
 bool confirmation_prompt(int line, char* mesg) {
   // set up prompt window
   WINDOW* prompt = newwin(1, strlen(mesg)+10, line+1, 0);

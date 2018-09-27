@@ -111,6 +111,12 @@ int tasklist_menu(struct tasklist* tl) {
           pos++;
         }
         break;
+      // rename list
+      case CTRL('r'):
+        keypad(body, false);
+        rename_list_prompt(tl, pos % height);
+        keypad(body, true);
+        break;
       // new task check
       case 10:
         if(pos == tl->task_count) {

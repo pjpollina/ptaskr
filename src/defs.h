@@ -49,6 +49,7 @@ int render_line_wipeout(int);
 int line_edit_prompt(char[], int, int);
 int new_task_prompt(struct tasklist*, int);
 int save_prompt(struct tasklist*, int);
+int rename_list_prompt(struct tasklist*, int);
 bool confirmation_prompt(int, char*);
 
 int write_listfile(struct tasklist*, char*);
