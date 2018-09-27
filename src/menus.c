@@ -16,6 +16,7 @@ int tasklist_menu(struct tasklist* tl) {
   // logic
   int pos = 0;
   int is_active = true;
+  bool changed_since_save = false;
   while(is_active) {
     // check for term resize
     if(getmaxx(stdscr) != getmaxx(body) || getmaxy(stdscr) != getmaxy(body)) {
@@ -63,12 +64,16 @@ int tasklist_menu(struct tasklist* tl) {
         break;
       // increment selected task
       case KEY_LEFT:
-        if(tl->tasks[pos].reached != 0)
+        if(tl->tasks[pos].reached != 0) {
           tl->tasks[pos].reached--;
+          changed_since_save = true;
+        }
         break;
       case KEY_RIGHT:
-        if(!task_complete(tl->tasks[pos]))
+        if(!task_complete(tl->tasks[pos])) {
           tl->tasks[pos].reached++;
+          changed_since_save = true;
+        }
         break;
       // edit current task
       case CTRL('e'):
@@ -76,6 +81,7 @@ int tasklist_menu(struct tasklist* tl) {
           keypad(body, false);
           line_edit_prompt(tl->tasks[pos].desc, pos % height, 3);
           keypad(body, true);
+          changed_since_save = true;
         }
         break;
       // delete current task
@@ -86,6 +92,7 @@ int tasklist_menu(struct tasklist* tl) {
           render_line_wipeout(pos % height);
           if(confirmation_prompt(pos % height, "Delete selected task?")) {
             remove_task_from_list(tl, pos);
+            changed_since_save = true;
           }
           keypad(body, true);
           break;
@@ -96,6 +103,7 @@ int tasklist_menu(struct tasklist* tl) {
         render_line_wipeout(pos % height);
         if(confirmation_prompt(pos % height, "Write changes to disk?")) {
           save_prompt(tl, pos % height);
+          changed_since_save = false;
         }
         keypad(body, true);
         break;
@@ -104,12 +112,14 @@ int tasklist_menu(struct tasklist* tl) {
         if(pos > 0) {
           move_task_up(tl, pos);
           pos--;
+          changed_since_save = true;
         }
         break;
       case CTRL_DOWN:
         if(pos < tl->task_count-1) {
           move_task_down(tl, pos);
           pos++;
+          changed_since_save = true;
         }
         break;
       // rename list
@@ -117,15 +127,20 @@ int tasklist_menu(struct tasklist* tl) {
         keypad(body, false);
         rename_list_prompt(tl, pos % height);
         keypad(body, true);
+        changed_since_save = true;
         break;
       // increase selected task goal
       case CTRL_LEFT:
-        if(tl->tasks[pos].goal != 1)
+        if(tl->tasks[pos].goal != 1) {
           tl->tasks[pos].goal--;
+          changed_since_save = true;
+        }
         break;
       case CTRL_RIGHT:
-        if(tl->tasks[pos].goal != USHRT_MAX)
+        if(tl->tasks[pos].goal != USHRT_MAX) {
           tl->tasks[pos].goal++;
+          changed_since_save = true;
+        }
         break;
       // new task check
       case 10:
@@ -133,10 +148,18 @@ int tasklist_menu(struct tasklist* tl) {
           keypad(body, false);
           new_task_prompt(tl, pos % height);
           keypad(body, true);
+          changed_since_save = true;
         }
         break;
       // exit menu
       case KEY_F(1):
+        keypad(body, false);
+        if(changed_since_save) {
+          render_line_wipeout(pos % height);
+          if(confirmation_prompt(pos % height, "Write unsaved changes to disk?")) {
+            save_prompt(tl, pos % height);
+          }
+        }
         is_active = false;
         break;
     }
