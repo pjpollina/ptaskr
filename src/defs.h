@@ -12,6 +12,8 @@
 
 #define CTRL_UP 566
 #define CTRL_DOWN 525
+#define CTRL_LEFT 545
+#define CTRL_RIGHT 560
 
 #define CTRL(key) ((key) & 037)
 

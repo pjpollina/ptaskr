@@ -1,6 +1,7 @@
 #include <ncurses.h>
 #include <string.h>
 #include <stdlib.h>
+#include <limits.h>
 
 #include "defs.h"
 
@@ -116,6 +117,15 @@ int tasklist_menu(struct tasklist* tl) {
         keypad(body, false);
         rename_list_prompt(tl, pos % height);
         keypad(body, true);
+        break;
+      // increase selected task goal
+      case CTRL_LEFT:
+        if(tl->tasks[pos].goal != 1)
+          tl->tasks[pos].goal--;
+        break;
+      case CTRL_RIGHT:
+        if(tl->tasks[pos].goal != USHRT_MAX)
+          tl->tasks[pos].goal++;
         break;
       // new task check
       case 10:
