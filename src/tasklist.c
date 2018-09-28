@@ -34,12 +34,7 @@ int main(int argc, char** argv) {
   struct tasklist tl;
   int err = read_listfile(&tl, filepath);
   if(err) {
-    tl = init_tasklist("Test List");
-    for(int i = 1; i < 31; i++) {
-      char str[20];
-      sprintf(str, "Task #%d", i);
-      add_task_to_list(&tl, init_task(str, (i > 15) ? 25 : 1));
-    }
+    tl = init_tasklist("New List");
   }
 
   // logic
