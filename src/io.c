@@ -5,18 +5,20 @@
 
 #include "defs.h"
 
-static char* path_expansion(char* filepath) {
+static int path_expansion(char* output, char* filepath) {
   if(filepath[0] == '~' && filepath[1] == '/') {
-    char* buffer = malloc(4096);
+    char buffer[4096];
     strcpy(buffer, getenv("HOME"));
     strcat(buffer, &filepath[1]);
-    return buffer;
+    strcpy(output, buffer);
+    return EXIT_SUCCESS;
   }
-  return filepath;
+  strcpy(output, filepath);
+  return EXIT_SUCCESS;
 }
 
-static char* get_directory(char* filepath) {
-  char* buffer = malloc(4096);
+static int get_parent_directory(char* output, char* filepath) {
+  char buffer[4096];
   strcpy(buffer, filepath);
   int i = strlen(buffer) - 1;
   while(i > -1) {
@@ -25,15 +27,25 @@ static char* get_directory(char* filepath) {
     buffer[i] = '\0';
     i--;
   }
-  return buffer;
+  strcpy(output, buffer);
+  return EXIT_SUCCESS;
+}
+
+static int make_parent_directory(char* filepath) {
+  char pd[4096];
+  get_parent_directory(pd, filepath);
+  return mkdir(pd, 0777);
 }
 
 int write_listfile(struct tasklist* tl, char* filepath) {
+  // get full filepath
+  char full_filepath[4096];
+  path_expansion(full_filepath, filepath);
   // make directory if not exist
-  mkdir(get_directory(path_expansion(filepath)), 0777);
+  make_parent_directory(full_filepath);
   // open file
   FILE* outfile;
-  outfile = fopen(path_expansion(filepath), "w");
+  outfile = fopen(full_filepath, "w");
   if(!outfile) {
     fprintf(stderr, "Error opening file.\n");
     return EXIT_FAILURE;
@@ -49,11 +61,14 @@ int write_listfile(struct tasklist* tl, char* filepath) {
 }
 
 int read_listfile(struct tasklist* tl, char* filepath) {
+  // get full filepath
+  char full_filepath[4096];
+  path_expansion(full_filepath, filepath);
   // make directory if not exist
-  mkdir(get_directory(path_expansion(filepath)), 0777);
+  make_parent_directory(full_filepath);
   // open file
   FILE* infile;
-  infile = fopen(path_expansion(filepath), "r");
+  infile = fopen(full_filepath, "r");
   if(!infile) {
     fprintf(stderr, "Error opening file.\n");
     return EXIT_FAILURE;
