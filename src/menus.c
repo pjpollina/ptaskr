@@ -109,7 +109,7 @@ int tasklist_menu(struct tasklist* tl, char* filepath) {
         break;
       // shift tasks
       case CTRL_UP:
-        if(pos > 0) {
+        if(pos > 0 && pos != tl->task_count) {
           move_task_up(tl, pos);
           pos--;
           changed_since_save = true;
