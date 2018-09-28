@@ -1,5 +1,9 @@
 # PTASKR: A terminal todo list
-Have you ever thought to yourself "Man, the only thing I love more than todo lists with incredibly minimalistic graphics is doing everything from the terminal" before? I have, so I made this. It's pretty much exactly that. Neat, huh?
+**ptaskr** is a lightweight, minimalistic todo list application designed to be just a slight
+step above plain text files. GUI-Luddites welcome.
+
+Passing a filename on the command line will allow you to open a specific list file; otherwise
+list `~/.config/ptaskr/default.list` will be used.
 
 ## How to use
 
@@ -15,5 +19,5 @@ Have you ever thought to yourself "Man, the only thing I love more than todo lis
 | <kbd>Ctrl</kbd>+<kbd>S</kbd> | Save list to file |
 | <kbd>F1</kbd>&ensp;<kbd>Ctrl</kbd>+<kbd>X</kbd> | Quit ptaskr |
 
-## Required libraries
+## Dependencies
 - `libncurses5-dev`

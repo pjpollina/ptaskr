@@ -1,0 +1,54 @@
+.TH PTASKR 1 "version 1.0" "September 2018"
+
+.SH NAME
+ptaskr \- Pj's TASK organizeR, an ncurses todo list
+
+.SH SYNOPSIS
+.B ptasker 
+.RI [file]
+
+.SH DESCRIPTION
+\fBptaskr\fP is a lightweight, minimalistic todo list application designed to be just a slight
+step above plain text files. GUI-Luddites welcome.
+
+Passing a filename on the command line will allow you to open a specific list file; otherwise
+list ~/.config/ptaskr/default.list will be used.
+
+.SH CONTROLS
+.TP
+\fBUp/Down:\fP
+Move cursor up/down one task
+.TP
+\fBPgUp/PgDn:\fP
+Move cursor up/down one page
+.TP
+\fBLeft/Right:\fP
+Add/remove selected task progress
+.TP
+\fBCtrl+Up/Ctrl+Down:\fP
+Shift selected task up/down
+.TP
+\fBCtrl+Left/Ctrl+Right:\fP
+Increase/decrease selected task goal
+.TP
+\fBCtrl+E:\fP
+Edit selected task description
+.TP
+\fBCtrl+D:\fP
+Delete selected task
+.TP
+\fBCtrl+R:\fP
+Rename List
+.TP
+\fBCtrl+S:\fP
+Save list to file
+.TP
+\fBF1, Ctrl+X:\fP
+Quit ptaskr
+
+.SH SEE ALSO
+.br
+\fIhttps://github.com/pjpollina/ptaskr/\fR   GitHub repository
+
+.SH AUTHOR
+PJ Pollina <contact@pjpollina.info>
