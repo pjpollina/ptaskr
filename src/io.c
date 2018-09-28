@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #include "defs.h"
 
@@ -14,7 +15,22 @@ static char* path_expansion(char* filepath) {
   return filepath;
 }
 
+static char* get_directory(char* filepath) {
+  char* buffer = malloc(4096);
+  strcpy(buffer, filepath);
+  int i = strlen(buffer) - 1;
+  while(i > -1) {
+    if(buffer[i] == '/')
+      break;
+    buffer[i] = '\0';
+    i--;
+  }
+  return buffer;
+}
+
 int write_listfile(struct tasklist* tl, char* filepath) {
+  // make directory if not exist
+  mkdir(get_directory(path_expansion(filepath)), 0777);
   // open file
   FILE* outfile;
   outfile = fopen(path_expansion(filepath), "w");
@@ -33,6 +49,8 @@ int write_listfile(struct tasklist* tl, char* filepath) {
 }
 
 int read_listfile(struct tasklist* tl, char* filepath) {
+  // make directory if not exist
+  mkdir(get_directory(path_expansion(filepath)), 0777);
   // open file
   FILE* infile;
   infile = fopen(path_expansion(filepath), "r");

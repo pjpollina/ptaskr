@@ -7,7 +7,7 @@
 
 #include "defs.h"
 
-#define DEFAULT_FILEPATH "data/list.dat"
+#define DEFAULT_FILEPATH "~/.config/ptaskr/default.list"
 
 int main(int argc, char** argv) {
   // ncurses setup
@@ -29,7 +29,7 @@ int main(int argc, char** argv) {
   // set filepath
   char filepath[4096];
   strcpy(filepath, (argc > 1) ? argv[1] : DEFAULT_FILEPATH);
-
+  
   // test structs
   struct tasklist tl;
   int err = read_listfile(&tl, filepath);
