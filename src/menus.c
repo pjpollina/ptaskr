@@ -133,6 +133,9 @@ int tasklist_menu(struct tasklist* tl, char* filepath) {
       case CTRL_LEFT:
         if(tl->tasks[pos].goal != 1) {
           tl->tasks[pos].goal--;
+          if(tl->tasks[pos].goal < tl->tasks[pos].reached) {
+            tl->tasks[pos].reached = tl->tasks[pos].goal;
+          }
           changed_since_save = true;
         }
         break;
