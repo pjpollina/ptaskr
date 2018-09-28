@@ -161,17 +161,20 @@ int tasklist_menu(struct tasklist* tl, char* filepath) {
         if(confirmation_prompt(pos % height, "Are you sure?")) {
           if(changed_since_save) {
             render_line_wipeout(pos % height);
-            if(confirmation_prompt(pos % height, "Write unsaved changes to disk?"))
-              save_prompt(tl, pos % height, filepath);
+            if(confirmation_prompt(pos % height, "Write unsaved changes to disk?")) {
+              int status = save_prompt(tl, pos % height, filepath);
+              if(status == EXIT_FAILURE) {
+                keypad(body, true);
+                continue;
+              }
+            }
           }
           is_active = false;
         }
-        keypad(body, true);
         break;
     }
   }
   // terminate
-  keypad(body, false);
   delwin(header);
   delwin(body);
   return EXIT_SUCCESS;

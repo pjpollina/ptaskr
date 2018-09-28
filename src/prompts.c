@@ -196,11 +196,17 @@ int save_prompt(struct tasklist* tl, int line, char* filepath) {
   line_edit_prompt(filepath, line, 21);
 
   // write to file
-  write_listfile(tl, filepath);
+  int status = write_listfile(tl, filepath);
+  if(status == EXIT_FAILURE) {
+    wclear(menu);
+    mvwprintw(menu, 0, 0, "Error writing file! Press any key to continue...");
+    wrefresh(menu);
+    wgetch(menu);
+  }
 
   // terminate
   delwin(menu);
-  return EXIT_SUCCESS;
+  return status;
 }
 
 int rename_list_prompt(struct tasklist* tl, int line) {
