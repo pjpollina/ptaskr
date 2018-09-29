@@ -10,10 +10,19 @@
 #define COMPLETE_COLOR 1
 #define MENU_NEW_TASK "[New Task]"
 
-#define CTRL_UP 566
-#define CTRL_DOWN 525
-#define CTRL_LEFT 545
-#define CTRL_RIGHT 560
+#ifdef __APPLE__
+  #define CTRL_UP 562
+  #define CTRL_DOWN 521
+  #define CTRL_LEFT 541
+  #define CTRL_RIGHT 556
+#else
+  #define CTRL_UP 566
+  #define CTRL_DOWN 525
+  #define CTRL_LEFT 545
+  #define CTRL_RIGHT 560
+#endif
+
+#define KEY_MAC_BACKSPACE 127
 
 #define CTRL(key) ((key) & 037)
 

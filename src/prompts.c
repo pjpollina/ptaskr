@@ -65,6 +65,7 @@ static int get_goal_input(int line) {
       // delete a char
       case KEY_BACKSPACE:
       case KEY_DC:
+      case KEY_MAC_BACKSPACE:
         if(pos != 0) {
           remove_from_string(buffer, pos);
           pos--;
@@ -134,6 +135,7 @@ int line_edit_prompt(char data[], int line, int col) {
       // delete a char
       case KEY_BACKSPACE:
       case KEY_DC:
+      case KEY_MAC_BACKSPACE:
         if(pos != 0) {
           remove_from_string(buffer, pos);
           pos--;
@@ -257,6 +259,7 @@ bool confirmation_prompt(int line, char* mesg) {
       // delete current input
       case KEY_BACKSPACE:
       case KEY_DC:
+      case KEY_MAC_BACKSPACE:
         yn = '\0';
         break;
       // confirm input with enter key
