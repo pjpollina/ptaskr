@@ -1,5 +1,5 @@
 # Compiler info
-CC	    = gcc
+CC    ?= gcc
 CFLAGS = -Wall
 
 # Program info
@@ -16,11 +16,15 @@ INS_LIB = $(INS_PRE)/lib
 INS_MAN = $(INS_PRE)/share/man
 INS_CNF = ~/.config/$(NAME)
 
-bin/$(NAME): $(MAIN) $(DEPS) $(OBJS)
-	$(CC) $^ -o $@ $(CFLAGS) $(LIBS)
+bin/$(NAME): $(MAIN) $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
 
-obj/%.o: src/%.c $(DEPS)
-	$(CC) -c $< -o $@ $(CFLAGS)
+obj/%.o: src/%.c $(DEPS) | prebuild
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+prebuild:
+	mkdir -p bin
+	mkdir -p obj
 
 clean:
 	rm -rf bin/*
