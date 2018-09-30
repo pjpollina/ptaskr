@@ -19,5 +19,9 @@ list `~/.config/ptaskr/default.list` will be used.
 | <kbd>Ctrl</kbd>+<kbd>S</kbd> | Save list to file |
 | <kbd>F1</kbd>&ensp;<kbd>Ctrl</kbd>+<kbd>X</kbd> | Quit ptaskr |
 
+## Known bugs
+When selecting `[New Task]` on macOS, the input for the description seems to get filled with some
+nonsense data. I have no idea why this happens.
+
 ## Dependencies
 - `libncurses5-dev`
