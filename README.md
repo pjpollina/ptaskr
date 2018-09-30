@@ -5,7 +5,19 @@ step above plain text files. GUI-Luddites welcome.
 Passing a filename on the command line will allow you to open a specific list file; otherwise
 list `~/.config/ptaskr/default.list` will be used.
 
-## How to use
+# Installation
+I don't know how to make deb files and GNU docs scare me so you should build from source.
+```bash
+git clone https://github.com/pjpollina/ptaskr
+cd ptaskr
+make && sudo make install
+```
+Requires libncurses development headers.
+
+# Usage
+Run `ptaskr [filename]` from your terminal of choice and you're good to go. No fancy options required.   
+To add a task to your list, highlight the [New Task] option and hit <kbd>Enter</kbd> (or <kbd>Return</kbd> if you want to Think Different&trade;).
+The full list of controls is listed below
 
 | Keyboard | Function |   
 | :---: | --- |   
@@ -19,9 +31,5 @@ list `~/.config/ptaskr/default.list` will be used.
 | <kbd>Ctrl</kbd>+<kbd>S</kbd> | Save list to file |
 | <kbd>F1</kbd>&ensp;<kbd>Ctrl</kbd>+<kbd>X</kbd> | Quit ptaskr |
 
-## Known bugs
-When selecting `[New Task]` on macOS, the input for the description seems to get filled with some
-nonsense data. I have no idea why this happens.
-
-## Dependencies
-- `libncurses5-dev`
+# Credits
+Copyright &copy; 2018 PJ Pollina. Released under the MIT License. See [LICENSE](LICENSE) for more information.
