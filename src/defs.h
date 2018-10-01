@@ -38,10 +38,10 @@ struct tasklist {
   struct task tasks[TASK_LIST_MAX];
 };
 
-struct task init_task(char*, unsigned short);
-struct tasklist init_tasklist(char*);
-bool task_complete(struct task);
-bool tasklist_full(struct tasklist);
+struct task init_task(const char*, unsigned short);
+struct tasklist init_tasklist(const char*);
+bool task_complete(struct task*);
+bool tasklist_full(struct tasklist*);
 int add_task_to_list(struct tasklist*, struct task);
 struct task remove_task_from_list(struct tasklist*, int);
 int move_task_up(struct tasklist*, int);
@@ -49,9 +49,9 @@ int move_task_down(struct tasklist*, int);
 
 int tasklist_menu(struct tasklist*, char*);
 
-int render_header(WINDOW*, struct tasklist);
-int render_task(WINDOW*, struct task, int, int);
-int render_tasklist(WINDOW*, struct tasklist, int);
+int render_header(WINDOW*, struct tasklist*);
+int render_task(WINDOW*, struct task*, int, int);
+int render_tasklist(WINDOW*, struct tasklist*, int);
 int render_ntprompt(WINDOW*, int, int);
 int render_line_wipeout(int);
 
@@ -59,9 +59,9 @@ int line_edit_prompt(char*, int, int);
 int new_task_prompt(struct tasklist*, int);
 int save_prompt(struct tasklist*, int, char*);
 int rename_list_prompt(struct tasklist*, int);
-bool confirmation_prompt(int, char*);
+bool confirmation_prompt(int, const char*);
 
-int write_listfile(struct tasklist*, char*);
-int read_listfile(struct tasklist*, char*);
+int write_listfile(struct tasklist*, const char*);
+int read_listfile(struct tasklist*, const char*);
 
 #endif

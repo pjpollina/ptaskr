@@ -28,9 +28,9 @@ int tasklist_menu(struct tasklist* tl, char* filepath) {
     int height = getmaxy(body);
 
     // rendering  
-    render_header(header, tl[0]);
+    render_header(header, tl);
     wclear(body);
-    render_tasklist(body, tl[0], pos);
+    render_tasklist(body, tl, pos);
     wrefresh(body);
 
     // input
@@ -72,7 +72,7 @@ int tasklist_menu(struct tasklist* tl, char* filepath) {
         }
         break;
       case KEY_RIGHT:
-        if(!task_complete(tl->tasks[pos])) {
+        if(!task_complete(&tl->tasks[pos])) {
           tl->tasks[pos].reached++;
           changed_since_save = true;
         }

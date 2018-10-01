@@ -7,7 +7,7 @@
 
 #include "defs.h"
 
-static int insert_into_string(char* str, char new, int pos) {
+static int insert_into_string(char* str, const char new, int pos) {
   if(strlen(str) == pos) {
     str[pos] = new;
     str[pos + 1] = '\0';
@@ -238,7 +238,7 @@ int rename_list_prompt(struct tasklist* tl, int line) {
   return EXIT_SUCCESS;
 }
 
-bool confirmation_prompt(int line, char* mesg) {
+bool confirmation_prompt(int line, const char* mesg) {
   // set up prompt window
   WINDOW* prompt = newwin(1, strlen(mesg)+10, line+1, 0);
   keypad(prompt, true);

@@ -4,24 +4,24 @@
 
 #include "defs.h"
 
-struct task init_task(char* desc, unsigned short goal) {
+struct task init_task(const char* desc, unsigned short goal) {
   struct task t = { .goal = goal, .reached = 0 };
   strcpy(t.desc, desc);
   return t;
 }
 
-struct tasklist init_tasklist(char* name) {
+struct tasklist init_tasklist(const char* name) {
   struct tasklist tl = { .task_count = 0 };
   strcpy(tl.name, name);
   return tl;
 }
 
-bool task_complete(struct task t) {
-  return t.reached == t.goal;
+bool task_complete(struct task* t) {
+  return t->reached == t->goal;
 }
 
-bool tasklist_full(struct tasklist tl) {
-  return tl.task_count == TASK_LIST_MAX;
+bool tasklist_full(struct tasklist* tl) {
+  return tl->task_count == TASK_LIST_MAX;
 }
 
 int add_task_to_list(struct tasklist* tl, struct task t) {

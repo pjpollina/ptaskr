@@ -5,7 +5,7 @@
 
 #include "defs.h"
 
-static int path_expansion(char* output, char* filepath) {
+static int path_expansion(char* output, const char* filepath) {
   if(filepath[0] == '~' && filepath[1] == '/') {
     char buffer[4096];
     strcpy(buffer, getenv("HOME"));
@@ -17,7 +17,7 @@ static int path_expansion(char* output, char* filepath) {
   return EXIT_SUCCESS;
 }
 
-static int get_parent_directory(char* output, char* filepath) {
+static int get_parent_directory(char* output, const char* filepath) {
   char buffer[4096];
   strcpy(buffer, filepath);
   int i = strlen(buffer) - 1;
@@ -31,13 +31,13 @@ static int get_parent_directory(char* output, char* filepath) {
   return EXIT_SUCCESS;
 }
 
-static int make_parent_directory(char* filepath) {
+static int make_parent_directory(const char* filepath) {
   char pd[4096];
   get_parent_directory(pd, filepath);
   return mkdir(pd, 0777);
 }
 
-int write_listfile(struct tasklist* tl, char* filepath) {
+int write_listfile(struct tasklist* tl, const char* filepath) {
   // get full filepath
   char full_filepath[4096];
   path_expansion(full_filepath, filepath);
@@ -64,7 +64,7 @@ int write_listfile(struct tasklist* tl, char* filepath) {
   return EXIT_SUCCESS;
 }
 
-int read_listfile(struct tasklist* tl, char* filepath) {
+int read_listfile(struct tasklist* tl, const char* filepath) {
   // get full filepath
   char full_filepath[4096];
   path_expansion(full_filepath, filepath);
