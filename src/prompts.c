@@ -7,7 +7,7 @@
 
 #include "defs.h"
 
-static int insert_into_string(char str[], char new, int pos) {
+static int insert_into_string(char* str, char new, int pos) {
   if(strlen(str) == pos) {
     str[pos] = new;
     str[pos + 1] = '\0';
@@ -19,7 +19,7 @@ static int insert_into_string(char str[], char new, int pos) {
   return EXIT_SUCCESS;
 }
 
-static int remove_from_string(char str[], int pos) {
+static int remove_from_string(char* str, int pos) {
   if(pos == strlen(str)) {
     str[strlen(str)-1] = '\0';
     return EXIT_SUCCESS;
@@ -31,12 +31,12 @@ static int remove_from_string(char str[], int pos) {
 }
 
 static int get_goal_input(int line) {
-  // set up editor window
-  WINDOW* w = newwin(1, getmaxx(stdscr), line+1, 0);
-  keypad(w, true);
-  curs_set(1);
+  // set up prompt window
+  WINDOW* prompt = newwin(1, getmaxx(stdscr), line + 1, 0);
+  keypad(prompt, true);
+  curs_set(true);
 
-  // allocate data
+  // init data 
   int input = 0;
   char buffer[16];
 
@@ -44,23 +44,25 @@ static int get_goal_input(int line) {
   int pos = 0;
   bool is_active = true;
   while(is_active) {
-    // render
-    wclear(w);
-    mvwprintw(w, 0, 0, "Enter goal: %s", buffer);
-    wmove(w, 0, pos + 12);
-    wrefresh(w);
+    // rendering
+    wclear(prompt);
+    mvwprintw(prompt, 0, 0, "Enter goal: %s", buffer);
+    wmove(prompt, 0, pos + 12);
+    wrefresh(prompt);
 
     // editor
-    int ch = wgetch(w);
+    int ch = wgetch(prompt);
     switch(ch) {
       // move the cursor horizontally
       case KEY_LEFT:
-        if(pos != 0)
+        if(pos != 0) {
           pos--;
+        }
         break;
       case KEY_RIGHT:
-        if(pos != strlen(buffer))
+        if(pos != strlen(buffer)) {
           pos++;
+        }
         break;
       // delete a char
       case KEY_BACKSPACE:
@@ -95,16 +97,16 @@ static int get_goal_input(int line) {
   }
 
   // close
-  curs_set(0);
-  keypad(w, false);
-  delwin(w);
+  curs_set(false);
+  keypad(prompt, false);
+  delwin(prompt);
   return input;
 }
 
-int line_edit_prompt(char data[], int line, int col) {
+int line_edit_prompt(char* data, int line, int col) {
   // set up editor window
-  WINDOW* editor = newwin(1, DESC_MAX, line+1, col);
-  keypad(editor, true);
+  WINDOW* prompt = newwin(1, DESC_MAX, line+1, col);
+  keypad(prompt, true);
   curs_set(true);
 
   // init data
@@ -115,13 +117,13 @@ int line_edit_prompt(char data[], int line, int col) {
   // logic
   bool is_active = true;
   while(is_active) {
-    wclear(editor);
-    mvwprintw(editor, 0, 0, "%s", buffer);
-    wmove(editor, 0, pos);
-    wrefresh(editor);
+    wclear(prompt);
+    mvwprintw(prompt, 0, 0, "%s", buffer);
+    wmove(prompt, 0, pos);
+    wrefresh(prompt);
 
     // input
-    int ch = wgetch(editor);
+    int ch = wgetch(prompt);
     switch(ch) {
       // move the cursor horizontally
       case KEY_LEFT:
@@ -156,10 +158,10 @@ int line_edit_prompt(char data[], int line, int col) {
   }
 
   // terminate
-  curs_set(0);
+  curs_set(false);
   strcpy(data, buffer);
-  keypad(editor, false);
-  delwin(editor);
+  keypad(prompt, false);
+  delwin(prompt);
   return EXIT_SUCCESS;
 }
 
@@ -186,28 +188,28 @@ int new_task_prompt(struct tasklist* tl, int line) {
 
 int save_prompt(struct tasklist* tl, int line, char* filepath) {
   // set up window
-  WINDOW* menu = newwin(1, getmaxx(stdscr), line+1, 0);
+  WINDOW* prompt = newwin(1, getmaxx(stdscr), line+1, 0);
 
   // activate keyboard control
-  keypad(menu, true);
+  keypad(prompt, true);
 
   // prompt for filepath
-  wclear(menu);
-  mvwprintw(menu, 0, 0, "Enter path to write: ");
-  wrefresh(menu);
+  wclear(prompt);
+  mvwprintw(prompt, 0, 0, "Enter path to write: ");
+  wrefresh(prompt);
   line_edit_prompt(filepath, line, 21);
 
   // write to file
   int status = write_listfile(tl, filepath);
   if(status == EXIT_FAILURE) {
-    wclear(menu);
-    mvwprintw(menu, 0, 0, "Error writing file! Press any key to continue...");
-    wrefresh(menu);
-    wgetch(menu);
+    wclear(prompt);
+    mvwprintw(prompt, 0, 0, "Error writing file! Press any key to continue...");
+    wrefresh(prompt);
+    wgetch(prompt);
   }
 
   // terminate
-  delwin(menu);
+  delwin(prompt);
   return status;
 }
 

@@ -39,13 +39,15 @@ int tasklist_menu(struct tasklist* tl, char* filepath) {
       // key scrolling
       case KEY_UP:
         pos--;
-        if(pos < 0)
+        if(pos < 0) {
           pos++;
+        }
         break;
       case KEY_DOWN:
         pos++;
-        if(pos > tl->task_count)
+        if(pos > tl->task_count) {
           pos = tl->task_count;
+        }
         break;
       // page jumps
       case KEY_PPAGE:

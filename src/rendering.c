@@ -30,15 +30,20 @@ int render_header(WINDOW* w, struct tasklist tl) {
 
 int render_task(WINDOW* w, struct task t, int line, int highlight) {
   // turn on relevant attributes
-  if(line == highlight)
+  if(line == highlight) {
     wattron(w, A_REVERSE);
-  if(task_complete(t))
+  }
+  if(task_complete(t)) {
     wattron(w, COLOR_PAIR(COMPLETE_COLOR));
+  }
+
   // render the task appropriately
-  if(t.goal == 1)
+  if(t.goal == 1) {
     mvwprintw(w, line, 0, " - %s [%c]", t.desc, (task_complete(t)) ? 'x' : ' ');
-  else
+  } else {
     mvwprintw(w, line, 0, " - %s [%d/%d]", t.desc, t.reached, t.goal);
+  }
+
   // turn off attributes
   wattroff(w, A_REVERSE);
   wattroff(w, COLOR_PAIR(COMPLETE_COLOR));
@@ -49,6 +54,7 @@ int render_tasklist(WINDOW* w, struct tasklist tl, int pos) {
   // initialize local variables
   int rows = getmaxy(w);
   int page = pos / rows;
+
   // render list
   for(int i = 0; i < rows; i++) {
     if(i+(rows*page) == tl.task_count) {
@@ -62,10 +68,13 @@ int render_tasklist(WINDOW* w, struct tasklist tl, int pos) {
 
 int render_ntprompt(WINDOW* w, int line, int highlight) {
   // turn on relevant attributes
-  if(line == highlight)
+  if(line == highlight) {
     wattron(w, A_REVERSE);
+  }
+
   // render the task appropriately
   mvwprintw(w, line, 0, MENU_NEW_TASK);
+  
   // turn off attributes
   wattroff(w, A_REVERSE);
   return EXIT_SUCCESS;

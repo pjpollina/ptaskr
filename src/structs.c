@@ -4,15 +4,15 @@
 
 #include "defs.h"
 
-struct task init_task(char* d, unsigned short g) {
-  struct task t = { .goal = g, .reached = 0 };
-  strcpy(t.desc, d);
+struct task init_task(char* desc, unsigned short goal) {
+  struct task t = { .goal = goal, .reached = 0 };
+  strcpy(t.desc, desc);
   return t;
 }
 
-struct tasklist init_tasklist(char* n) {
+struct tasklist init_tasklist(char* name) {
   struct tasklist tl = { .task_count = 0 };
-  strcpy(tl.name, n);
+  strcpy(tl.name, name);
   return tl;
 }
 

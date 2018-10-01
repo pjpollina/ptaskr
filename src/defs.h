@@ -55,7 +55,7 @@ int render_tasklist(WINDOW*, struct tasklist, int);
 int render_ntprompt(WINDOW*, int, int);
 int render_line_wipeout(int);
 
-int line_edit_prompt(char[], int, int);
+int line_edit_prompt(char*, int, int);
 int new_task_prompt(struct tasklist*, int);
 int save_prompt(struct tasklist*, int, char*);
 int rename_list_prompt(struct tasklist*, int);
