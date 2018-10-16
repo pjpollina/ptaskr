@@ -31,5 +31,16 @@ The full list of controls is listed below
 | <kbd>Ctrl</kbd>+<kbd>S</kbd> | Save list to file |
 | <kbd>F1</kbd>&ensp;<kbd>Ctrl</kbd>+<kbd>X</kbd> | Quit ptaskr |
 
+# Future Plans
+Just a few potential additions in the future, nothing set in stone though.
+
+- [ ] List section headers
+- [ ] Export lists to CSV/YAML/JSON/etc.
+- [ ] More colors!
+- [ ] Colors optional
+- [ ] Config control scheme
+- [ ] Config default filepath
+- [ ] Package as a deb/rpm
+
 # Credits
 Copyright &copy; 2018 PJ Pollina. Released under the MIT License. See [LICENSE](LICENSE) for more information.
