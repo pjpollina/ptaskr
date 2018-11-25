@@ -4,6 +4,11 @@ require 'bindata'
 
 DESC_MAX = 80
 
+ARGS = {
+  markdown: ['-m', '--markdown'],
+  yaml:     ['-y', '--yaml']
+}
+
 class PtaskrTask < BinData::Record
   endian :little
   string :desc, :read_length => DESC_MAX
@@ -59,4 +64,9 @@ class PtaskrList
   end
 end
 
-puts PtaskrList.new.to_yaml
+list = PtaskrList.new
+if(ARGV.empty? || !(ARGV & ARGS[:markdown]).empty?)
+  puts list.to_markdown
+elsif(!(ARGV & ARGS[:yaml]).empty?)
+  puts list.to_yaml
+end
