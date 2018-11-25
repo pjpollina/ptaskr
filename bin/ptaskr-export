@@ -10,8 +10,10 @@ class PtaskrTask < BinData::Record
   uint16 :goal
   uint16 :reached
 
+  def desc_clean; "#{desc.gsub("\0", "")}"; end
+
   def to_markdown
-    string = "- #{desc.gsub("\0", "")} "
+    string = "- #{desc_clean} "
     if(goal == 1)
       string << "[#{(reached == 1) ? 'x' : ' '}]"
     else
@@ -19,10 +21,20 @@ class PtaskrTask < BinData::Record
     end
     return string
   end
+
+  def to_yaml
+    <<~YAML
+      - !ptaskr-task
+        desc: #{desc_clean}
+        goal: #{goal}
+        reached: #{reached}
+    YAML
+  end
 end
 
 class PtaskrList
-attr_reader :tasks
+  attr_reader :tasks
+
   def initialize(filepath="~/.config/ptaskr/default.list")
     @name = ""
     @tasks = []
@@ -39,6 +51,12 @@ attr_reader :tasks
     @tasks.each {|t| md << t.to_markdown << "\n"}
     return md
   end
+
+  def to_yaml
+    yaml = "name: #{@name}\n"
+    @tasks.each {|t| yaml << t.to_yaml}
+    return yaml
+  end
 end
 
-puts PtaskrList.new.to_markdown
+puts PtaskrList.new.to_yaml
