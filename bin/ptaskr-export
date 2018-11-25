@@ -6,7 +6,8 @@ DESC_MAX = 80
 
 ARGS = {
   markdown: ['-m', '--markdown'],
-  yaml:     ['-y', '--yaml']
+  yaml:     ['-y', '--yaml'],
+  xml:      ['-x', '--xml']
 }
 
 class PtaskrTask < BinData::Record
@@ -35,6 +36,16 @@ class PtaskrTask < BinData::Record
         reached: #{reached}
     YAML
   end
+
+  def to_xml
+    <<~XMLNODE
+      <ptaskr-task>
+        <desc>#{desc_clean}</desc>
+        <goal>#{goal}</goal>
+        <reached>#{reached}</reached>
+      </ptaskr-task>
+    XMLNODE
+  end
 end
 
 class PtaskrList
@@ -62,6 +73,16 @@ class PtaskrList
     @tasks.each {|t| yaml << t.to_yaml}
     return yaml
   end
+
+  def to_xml
+    xml = <<~XML 
+      <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+      <ptaskr-list>
+      <name>#{@name}</name>
+    XML
+    @tasks.each {|t| xml << t.to_xml}
+    xml << '</ptaskr-list>'
+  end
 end
 
 list = PtaskrList.new
@@ -69,4 +90,6 @@ if(ARGV.empty? || !(ARGV & ARGS[:markdown]).empty?)
   puts list.to_markdown
 elsif(!(ARGV & ARGS[:yaml]).empty?)
   puts list.to_yaml
+elsif(!(ARGV & ARGS[:xml]).empty?)
+  puts list.to_xml
 end
