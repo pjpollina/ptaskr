@@ -1,0 +1,44 @@
+#!/usr/bin/env ruby
+
+require 'bindata'
+
+DESC_MAX = 80
+
+class PtaskrTask < BinData::Record
+  endian :little
+  string :desc, :read_length => DESC_MAX
+  uint16 :goal
+  uint16 :reached
+
+  def to_markdown
+    string = "- #{desc.gsub("\0", "")} "
+    if(goal == 1)
+      string << "[#{(reached == 1) ? 'x' : ' '}]"
+    else
+      string << "(#{reached}/#{goal})"
+    end
+    return string
+  end
+end
+
+class PtaskrList
+attr_reader :tasks
+  def initialize(filepath="~/.config/ptaskr/default.list")
+    @name = ""
+    @tasks = []
+    File.open(File.expand_path(filepath), 'r') do |io|
+      @name = io.gets.chomp.gsub("name: ", "")
+      until io.eof?
+        @tasks << PtaskrTask.read(io)
+      end
+    end
+  end
+
+  def to_markdown
+    md = "## #{@name}\n\n"
+    @tasks.each {|t| md << t.to_markdown << "\n"}
+    return md
+  end
+end
+
+puts PtaskrList.new.to_markdown
