@@ -7,7 +7,8 @@ DESC_MAX = 80
 ARGS = {
   markdown: ['-m', '--markdown'],
   yaml:     ['-y', '--yaml'],
-  xml:      ['-x', '--xml']
+  xml:      ['-x', '--xml'],
+  json:     ['-j', '--json']
 }
 
 class PtaskrTask < BinData::Record
@@ -46,6 +47,10 @@ class PtaskrTask < BinData::Record
       </ptaskr-task>
     XMLNODE
   end
+
+  def to_json
+    %Q<{ "desc":"#{desc_clean}", "goal":#{goal}, "reached":#{reached} }>
+  end
 end
 
 class PtaskrList
@@ -83,6 +88,21 @@ class PtaskrList
     @tasks.each {|t| xml << t.to_xml}
     xml << '</ptaskr-list>'
   end
+
+  def to_json
+    #json = %Q<{\n"name": "#{@name}",\n"tasks": [\n>
+    #@tasks.each {|t| json << "\t" << t.to_json << ",\n"}
+    #json.chomp(",\n") << "\n]\n}"
+    json_tasks = (@tasks.collect {|t| t.to_json}).join(",\n    ")
+    json = <<~JSON
+      {
+        "name": "#{@name}",
+        "tasks": [
+          #{json_tasks}
+        ]
+      }
+    JSON
+  end
 end
 
 list = PtaskrList.new
@@ -92,4 +112,6 @@ elsif(!(ARGV & ARGS[:yaml]).empty?)
   puts list.to_yaml
 elsif(!(ARGV & ARGS[:xml]).empty?)
   puts list.to_xml
+elsif(!(ARGV & ARGS[:json]).empty?)
+  puts list.to_json
 end
