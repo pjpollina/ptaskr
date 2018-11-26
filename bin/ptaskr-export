@@ -1,15 +1,10 @@
 #!/usr/bin/env ruby
 
 require 'bindata'
+require 'optparse'
 
 DESC_MAX = 80
-
-ARGS = {
-  markdown: ['-m', '--markdown'],
-  yaml:     ['-y', '--yaml'],
-  xml:      ['-x', '--xml'],
-  json:     ['-j', '--json']
-}
+DEFAULT_LISTPATH = "~/.config/ptaskr/default.list"
 
 class PtaskrTask < BinData::Record
   endian :little
@@ -54,9 +49,7 @@ class PtaskrTask < BinData::Record
 end
 
 class PtaskrList
-  attr_reader :tasks
-
-  def initialize(filepath="~/.config/ptaskr/default.list")
+  def initialize(filepath=DEFAULT_LISTPATH)
     @name = ""
     @tasks = []
     File.open(File.expand_path(filepath), 'r') do |io|
@@ -90,9 +83,6 @@ class PtaskrList
   end
 
   def to_json
-    #json = %Q<{\n"name": "#{@name}",\n"tasks": [\n>
-    #@tasks.each {|t| json << "\t" << t.to_json << ",\n"}
-    #json.chomp(",\n") << "\n]\n}"
     json_tasks = (@tasks.collect {|t| t.to_json}).join(",\n    ")
     json = <<~JSON
       {
@@ -105,13 +95,47 @@ class PtaskrList
   end
 end
 
-list = PtaskrList.new
-if(ARGV.empty? || !(ARGV & ARGS[:markdown]).empty?)
+def parse_args(args=ARGV)
+  options = {input_file: DEFAULT_LISTPATH, output_type: :markdown}
+  parser = OptionParser.new("Usage: ptaskr-export [OPTIONS] [LIST_FILE]", 25, "") do |parser|
+    parser.separator <<~SEP
+      \nList file defaults to #{DEFAULT_LISTPATH} if none is specified\n
+      Option#{' ' * 20}Function
+    SEP
+    parser.on("-m", "--markdown", "Export list as Markdown (default)") do
+      options[:output_type] = :markdown
+    end
+    parser.on("-y", "--yaml", "Export list as YAML") do
+      options[:output_type] = :yaml
+    end
+    parser.on("-x", "--xml", "Export list as XML") do
+      options[:output_type] = :xml
+    end
+    parser.on("-j", "--json", "Export list as JSON") do
+      options[:output_type] = :json
+    end
+    parser.on_tail("-h", "--help", "Show this message") do
+      puts parser
+      exit
+    end
+  end
+  parser.parse!(args)
+  unless(ARGV.empty?)
+    options[:input_file] = ARGV[0]
+  end
+  return options
+end
+
+options = parse_args
+list = PtaskrList.new(options[:input_file])
+
+case(options[:output_type])
+when(:markdown)
   puts list.to_markdown
-elsif(!(ARGV & ARGS[:yaml]).empty?)
+when(:yaml)
   puts list.to_yaml
-elsif(!(ARGV & ARGS[:xml]).empty?)
+when(:xml)
   puts list.to_xml
-elsif(!(ARGV & ARGS[:json]).empty?)
+when(:json)
   puts list.to_json
 end
