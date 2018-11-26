@@ -1,0 +1,64 @@
+#!/usr/bin/env ruby
+
+require 'bindata'
+
+DESC_MAX = 80
+DEFAULT_LISTPATH = "~/.config/ptaskr/default.list"
+
+class PtaskrTask < BinData::Record
+  endian :little
+  string :desc, :length => DESC_MAX
+  uint16 :goal
+  uint16 :reached
+
+  def self.create(desc, goal, reached)
+    task = PtaskrTask.new
+    task.desc.assign(desc)
+    task.goal.assign(goal)
+    task.reached.assign(reached)
+    return task
+  end
+
+  def self.from_markdown(md)
+    desc, status = md.scan(/[\w]+[\w\s]+[\w]|[\[\(]+[\d+x\s\/]+[\]\)]/)
+    if(status.include?(?[))
+      return create(desc, 1, status.include?(?x) && 1 || 0)
+    else
+      reached, goal = status[1..-2].split(?/)
+      return create(desc, goal.to_i, reached.to_i)
+    end
+  end
+end
+
+class PtaskrList
+  def initialize(name, tasks)
+    @name, @tasks = name, tasks
+  end
+
+  def write(filepath)
+    full_filepath = File.expand_path(filepath || DEFAULT_LISTPATH)
+    File.open(full_filepath, 'wb') do |file|
+      file.puts "name: #{@name}"
+      @tasks.each do |t|
+        t.write(file)
+      end
+    end
+  end
+
+  def self.from_markdown(filepath)
+    File.open(filepath, 'rb') do |file|
+      @name, @tasks = "", []
+      until file.eof?
+        line = file.gets.chomp
+        if line.start_with?('## ')
+          @name = line.gsub('## ', '')
+        elsif line.start_with?('- ')
+          @tasks << PtaskrTask.from_markdown(line)
+        end
+      end
+      return PtaskrList.new(@name, @tasks)
+    end
+  end
+end
+
+PtaskrList.from_markdown('markdown.md').write(ARGV[0])
