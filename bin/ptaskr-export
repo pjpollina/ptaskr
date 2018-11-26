@@ -46,6 +46,10 @@ class PtaskrTask < BinData::Record
   def to_json
     %Q<{ "desc":"#{desc_clean}", "goal":#{goal}, "reached":#{reached} }>
   end
+
+  def to_csv
+    "#{desc_clean},#{goal},#{reached}\r\n"
+  end
 end
 
 class PtaskrList
@@ -99,6 +103,12 @@ class PtaskrList
       }
     JSON
   end
+
+  def to_csv
+    csv = "desc,goal,reached\r\n#{@name},0,0\r\n"
+    @tasks.each {|t| csv << t.to_csv }
+    return csv.chomp
+  end
 end
 
 def parse_args(args=ARGV)
@@ -119,6 +129,9 @@ def parse_args(args=ARGV)
     end
     parser.on("-j", "--json", "Export list as JSON") do
       options[:output_type] = :json
+    end
+    parser.on("-c", "--csv", "Export list as CSV") do
+      options[:output_type] = :csv
     end
     parser.on_tail("-h", "--help", "Show this message") do
       puts parser
@@ -149,4 +162,6 @@ when(:xml)
   puts list.to_xml
 when(:json)
   puts list.to_json
+when(:csv)
+  puts list.to_csv
 end
