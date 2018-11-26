@@ -50,13 +50,19 @@ end
 
 class PtaskrList
   def initialize(filepath=DEFAULT_LISTPATH)
-    @name = ""
-    @tasks = []
-    File.open(File.expand_path(filepath), 'r') do |io|
-      @name = io.gets.chomp.gsub("name: ", "")
-      until io.eof?
-        @tasks << PtaskrTask.read(io)
+    full_filepath = File.expand_path(filepath)
+    abort("#{$0}: #{full_filepath}: No such file or directory") unless(File.exist?(full_filepath))
+    abort("#{$0}: #{full_filepath}: Permission denied") unless(File.readable?(full_filepath))
+    begin
+      File.open(full_filepath, 'r') do |io|
+        @name = io.gets.chomp.gsub("name: ", "")
+        @tasks = []
+        until io.eof?
+          @tasks << PtaskrTask.read(io)
+        end
       end
+    rescue IOError
+      abort("#{$0}: #{full_filepath}: File is not a valid ptaskr list or is corrupted")
     end
   end
 
@@ -119,8 +125,13 @@ def parse_args(args=ARGV)
       exit
     end
   end
-  parser.parse!(args)
+  begin
+    parser.parse!(args)
+  rescue OptionParser::InvalidOption => e
+    abort("#{$0}: #{e.to_s}\nType '#{$0} --help' for usage information.")
+  end
   unless(ARGV.empty?)
+    abort("#{$0}: Argument list too long\nType '#{$0} --help' for usage information.") unless(ARGV.count == 1)
     options[:input_file] = ARGV[0]
   end
   return options
