@@ -101,6 +101,8 @@ static int get_goal_input(int line) {
   input = atoi(buffer);
   if(input > USHRT_MAX) {
     input = USHRT_MAX;
+  } else if(input < 1) {
+    input = 1;
   }
 
   // close
