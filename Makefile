@@ -27,7 +27,7 @@ prebuild:
 	mkdir -p obj
 
 clean:
-	rm -rf bin/*
+	rm -rf bin/$(NAME)
 	rm -rf obj/*
 
 install:
