@@ -160,6 +160,7 @@ int tasklist_menu(struct tasklist* tl, char* filepath) {
       case KEY_F(1):
       case CTRL('x'):
         keypad(body, false);
+        render_line_wipeout(pos % height);
         if(confirmation_prompt(pos % height, "Are you sure?")) {
           if(changed_since_save) {
             render_line_wipeout(pos % height);
@@ -173,6 +174,7 @@ int tasklist_menu(struct tasklist* tl, char* filepath) {
           }
           is_active = false;
         }
+        keypad(body, true);
         break;
     }
   }
