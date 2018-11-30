@@ -30,6 +30,10 @@ static int remove_from_string(char* str, int pos) {
   return EXIT_SUCCESS;
 }
 
+static int remove_from_string_2(char* str, int pos) {
+  return remove_from_string(str, pos+1);
+}
+
 static int get_goal_input(int line) {
   // set up prompt window
   WINDOW* prompt = newwin(1, getmaxx(stdscr), line + 1, 0);
@@ -66,12 +70,15 @@ static int get_goal_input(int line) {
         break;
       // delete a char
       case KEY_BACKSPACE:
-      case KEY_DC:
       case KEY_MAC_BACKSPACE:
         if(pos != 0) {
           remove_from_string(buffer, pos);
           pos--;
         }
+        break;
+      // delete the char infront
+      case KEY_DC:
+        remove_from_string_2(buffer, pos);
         break;
       // exit with enter key
       case 10:
@@ -136,12 +143,15 @@ int line_edit_prompt(char* data, int line, int col) {
         break;
       // delete a char
       case KEY_BACKSPACE:
-      case KEY_DC:
       case KEY_MAC_BACKSPACE:
         if(pos != 0) {
           remove_from_string(buffer, pos);
           pos--;
         }
+        break;
+      // delete the char infront
+      case KEY_DC:
+        remove_from_string_2(buffer, pos);
         break;
       // exit with enter key
       case 10:
