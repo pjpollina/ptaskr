@@ -64,5 +64,6 @@ bool confirmation_prompt(int, const char*);
 int write_listfile(struct tasklist*, const char*);
 int read_listfile(struct tasklist*, const char*);
 int export_tasklist_xml(const char*, struct tasklist*);
+int export_tasklist_yaml(const char*, struct tasklist*);
 
 #endif
