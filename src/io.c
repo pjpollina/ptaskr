@@ -115,3 +115,24 @@ int export_tasklist_xml(const char* filepath, struct tasklist* tl) {
   fclose(outfile);
   return EXIT_SUCCESS;
 }
+
+// YAML Exporting
+static int task_to_yaml(char* output, struct task t) {
+  char buffer[1024];
+  sprintf(buffer, "- !ptaskr-task\n  desc: \"%s\"\n  goal: %u\n  reached: %u", t.desc, t.goal, t.reached);
+  strcpy(output, buffer);
+  return EXIT_SUCCESS;
+}
+
+int export_tasklist_yaml(const char* filepath, struct tasklist* tl) {
+  FILE* outfile;
+  outfile = fopen(filepath, "w");
+  fprintf(outfile, "---\nname: %s\n", tl->name);
+  for(int i = 0; i < tl->task_count; i++) {
+    char buffer[1024];
+    task_to_yaml(buffer, tl->tasks[i]);
+    fprintf(outfile, "%s\n", buffer);
+  }
+  fclose(outfile);
+  return EXIT_SUCCESS;
+}
