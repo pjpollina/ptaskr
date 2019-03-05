@@ -136,3 +136,25 @@ int export_tasklist_yaml(const char* filepath, struct tasklist* tl) {
   fclose(outfile);
   return EXIT_SUCCESS;
 }
+
+// JSON Exporting
+static int task_to_json(char* output, struct task t) {
+  char buffer[1024];
+  sprintf(buffer, "{ \"desc\": \"%s\", \"goal\": %u, \"reached\": %u }", t.desc, t.goal, t.reached);
+  strcpy(output, buffer);
+  return EXIT_SUCCESS;
+}
+
+int export_tasklist_json(const char* filepath, struct tasklist* tl) {
+  FILE* outfile;
+  outfile = fopen(filepath, "w");
+  fprintf(outfile, "{\n  \"name\": \"%s\",\n  \"tasks\": [\n", tl->name);
+  for(int i = 0; i < tl->task_count; i++) {
+    char buffer[1024];
+    task_to_json(buffer, tl->tasks[i]);
+    fprintf(outfile, "    %s\n", buffer);
+  }
+  fprintf(outfile, "  ]\n}\n");
+  fclose(outfile);
+  return EXIT_SUCCESS;
+}
