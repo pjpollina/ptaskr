@@ -92,3 +92,26 @@ int read_listfile(struct tasklist* tl, const char* filepath) {
   fclose(infile);
   return EXIT_SUCCESS;
 }
+
+// XML Exporting
+static int task_to_xml(char* output, struct task t) {
+  char buffer[1024];
+  sprintf(buffer, "  <ptaskr-task>\n    <desc>%s</desc>\n    <goal>%u</goal>\n    <reached>%u</reached>\n  </ptaskr-task>", t.desc, t.goal, t.reached);
+  strcpy(output, buffer);
+  return EXIT_SUCCESS;
+}
+
+int export_tasklist_xml(const char* filepath, struct tasklist* tl) {
+  FILE* outfile;
+  outfile = fopen(filepath, "w");
+  fprintf(outfile, "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n<ptaskr-list>\n");
+  fprintf(outfile, "  <name>%s</name>\n", tl->name);
+  for(int i = 0; i < tl->task_count; i++) {
+    char buffer[1024];
+    task_to_xml(buffer, tl->tasks[i]);
+    fprintf(outfile, "%s\n", buffer);
+  }
+  fprintf(outfile, "</ptaskr-list>");
+  fclose(outfile);
+  return EXIT_SUCCESS;
+}
