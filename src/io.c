@@ -93,6 +93,27 @@ int read_listfile(struct tasklist* tl, const char* filepath) {
   return EXIT_SUCCESS;
 }
 
+// CSV Exporting
+static int task_to_csv(char* output, struct task t) {
+  char buffer[1024];
+  sprintf(buffer, "%s,%d,%d", t.desc, t.goal, t.reached);
+  strcpy(output, buffer);
+  return EXIT_SUCCESS;
+}
+
+int export_tasklist_csv(const char* filepath, struct tasklist* tl) {
+  FILE* outfile;
+  outfile = fopen(filepath, "w");
+  fprintf(outfile, "desc,goal,reached\r\n%s,0,0\r\n", tl->name);
+  for(int i = 0; i < tl->task_count; i++) {
+    char buffer[1024];
+    task_to_csv(buffer, tl->tasks[i]);
+    fprintf(outfile, "%s\r\n", buffer);
+  }
+  fclose(outfile);
+  return EXIT_SUCCESS;
+}
+
 // XML Exporting
 static int task_to_xml(char* output, struct task t) {
   char buffer[1024];
