@@ -173,7 +173,7 @@ int export_tasklist_json(const char* filepath, struct tasklist* tl) {
   for(int i = 0; i < tl->task_count; i++) {
     char buffer[1024];
     task_to_json(buffer, tl->tasks[i]);
-    fprintf(outfile, "    %s\n", buffer);
+    fprintf(outfile, "    %s%s\n", buffer, (i + 1 != tl->task_count) ? "," : "");
   }
   fprintf(outfile, "  ]\n}\n");
   fclose(outfile);
