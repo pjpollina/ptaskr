@@ -158,3 +158,28 @@ int export_tasklist_json(const char* filepath, struct tasklist* tl) {
   fclose(outfile);
   return EXIT_SUCCESS;
 }
+
+// Markdown Exporting
+static int task_to_markdown(char* output, struct task t) {
+  char buffer[1024];
+  if(t.goal == 1) {
+    sprintf(buffer, " - [%c] %s", (task_complete(&t)) ? 'x' : ' ', t.desc);
+  } else {
+    sprintf(buffer, " - [%d/%d] %s", t.reached, t.goal, t.desc);
+  }
+  strcpy(output, buffer);
+  return EXIT_SUCCESS;
+}
+
+int export_tasklist_markdown(const char* filepath, struct tasklist* tl) {
+  FILE* outfile;
+  outfile = fopen(filepath, "w");
+  fprintf(outfile, "## %s\n\n", tl->name);
+  for(int i = 0; i < tl->task_count; i++) {
+    char buffer[1024];
+    task_to_markdown(buffer, tl->tasks[i]);
+    fprintf(outfile, "%s\n", buffer);
+  }
+  fclose(outfile);
+  return EXIT_SUCCESS;
+}
